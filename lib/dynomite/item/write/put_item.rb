@@ -49,7 +49,7 @@ module Dynomite::Item::Write
     end
 
     def handle_conditional_check_failed_exception(exception)
-      if @params[:condition_expression] == check_unique_condition
+      if @params[:condition_expression] == check_unique_params[:condition_expression]
         raise Dynomite::Error::RecordNotUnique.new(not_unique_message)
       else # currently only other case is locking
         raise Dynomite::Error::StaleObject.new(exception.message)
@@ -62,22 +62,24 @@ module Dynomite::Item::Write
       "A #{@model.class.name} with the primary key #{primary_key_attrs} already exists"
     end
 
-    def check_unique_params
-      if @model.new_record? && !@options[:put]
-        @params.merge!(condition_expression: check_unique_condition)
-      else
-        {}
-      end
-    end
-
     # https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html#Expressions.ConditionExpressions.PreventingOverwrites
     # Examples:
     #   attribute_not_exists(id)
     #   attribute_not_exists(category) AND attribute_not_exists(sku)
-    def check_unique_condition
-      condition_expression = @model.primary_key_fields.map do |field|
-        "attribute_not_exists(#{field})"
-      end.join(" AND ")
+    def check_unique_params
+      if @model.new_record? && !@options[:put]
+        condition_expression = @model.primary_key_fields.map do |field|
+          "attribute_not_exists(##{field})"
+        end.join(" AND ")
+        expression_attribute_names = {}.tap do |attribute_names|
+          @model.primary_key_fields.each do |field|
+            attribute_names["##{field}"] = field
+          end
+        end
+        { condition_expression: condition_expression, expression_attribute_names: expression_attribute_names }
+      else
+        {}
+      end
     end
 
     def locking_params
