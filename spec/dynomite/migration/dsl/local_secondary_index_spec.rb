@@ -1,4 +1,4 @@
-LSI = Dynomite::Migration::Dsl::LocalSecondaryIndex
+LSI = Dynomite::Migration::Dsl::Index::Lsi
 
 describe LSI do
   context "create index" do

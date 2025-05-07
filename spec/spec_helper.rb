@@ -16,6 +16,7 @@ ENV['AWS_SECRET_ACCESS_KEY'] = 'local'
 ENV['AWS_ACCESS_KEY_ID'] = 'local'
 Dynomite.configure do |config|
   config.endpoint = "http://localhost:8000"
+  config.log_level = :debug
 end
 
 module Helper

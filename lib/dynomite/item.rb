@@ -2,7 +2,7 @@ require "active_model"
 require "digest"
 require "yaml"
 
-# The model is ActiveModel compatiable even though DynamoDB is a different type of database.
+# The model is ActiveModel compatible even though DynamoDB is a different type of database.
 #
 # Examples:
 #

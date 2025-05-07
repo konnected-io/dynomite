@@ -1,7 +1,7 @@
 class CallbacksTester < Dynomite::Item
   field :title
 
-  before_initialize :initialize_hook
+  after_initialize :initialize_hook
   before_create :create_hook
   before_save :save_hook
   before_update :update_hook

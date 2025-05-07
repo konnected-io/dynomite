@@ -1,4 +1,4 @@
-GSI = Dynomite::Migration::Dsl::GlobalSecondaryIndex
+GSI = Dynomite::Migration::Dsl::Index::Gsi
 
 describe GSI do
   def dsl
