@@ -29,11 +29,7 @@ module Dynomite::Item::Indexes
     end
 
     def primary_key_found?
-      if @source.composite_key?
-        query_fields.include?(@source.partition_key_field) && query_fields.include?(@source.sort_key_field)
-      else
-        query_fields.include?(@source.partition_key_field)
-      end
+      query_fields.include?(@source.partition_key_field)
     end
 
     # It's possible to have multiple indexes with the same partition and sort key.
